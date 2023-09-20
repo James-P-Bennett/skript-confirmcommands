@@ -1,0 +1,51 @@
+# Repair Command
+command /repair:
+    trigger:
+        set {_player} to player
+        set {_heldItem} to {_player}'s tool
+        if {_heldItem} is not set:
+            send "&6&lServer &8&l| &cYou need to hold an item to repair it. Cancelling." to {_player}
+        else:
+            send "&6&lServer &8&l| &eJust to confirm, are you sure you want to repair &e%{_heldItem}%&e? This will charge you &a$1000 &eand cannot be used again for another &63 hours&e." to {_player}
+            wait 0.1 seconds
+            send "&e <command:/repairconfirm yes>&a[yes]<command:/repairconfirm no> &c[No]" to {_player}
+            if {_response} is "yes":
+                execute command "/erepair" by {_player}
+                play sound "BLOCK_ANVIL_USE" to player
+            if {_response} is "no":
+                send "&6&lServer &8&l| &7Repair was cancelled." to {_player}
+                play sound "ENTITY_ITEM_BREAK" to player                               
+command /repairconfirm <text>:
+    trigger:
+        set {_response} to arg-1
+        set {_player} to player
+        if {_response} is "yes":
+            execute command "/erepair" by {_player}
+            play sound "BLOCK_ANVIL_USE" to player
+        if {_response} is "no":
+            send "&6&lServer &8&l| &7Repair was cancelled." to {_player}
+            play sound "ENTITY_ITEM_BREAK" to player
+
+# Feed Command
+command /feed:
+    trigger:
+        set {_player} to player
+        send "&6&lServer &8&l| &eJust to confirm, are you sure you want to order some food? This will charge you &a$175 &eand cannot be used again for another &61 hour&e." to {_player}
+        wait 0.1 seconds
+        send "&e <command:/feedconfirm yes>&a[yes]<command:/feedconfirm no> &c[No]" to {_player}
+        if {_response} is "yes":
+            execute command "/efeed" by {_player}
+            play sound "BLOCK_NOTE_BLOCK_BELL" to player
+        if {_response} is "no":
+            send "&6&lServer &8&l| &7You cancelled your order." to {_player}
+            play sound "ENTITY_ITEM_BREAK" to player
+command /feedconfirm <text>:
+    trigger:
+        set {_response} to arg-1
+        set {_player} to player
+        if {_response} is "yes":
+            execute command "/efeed" by {_player}
+            play sound "BLOCK_NOTE_BLOCK_BELL" to player
+        if {_response} is "no":
+            send "&6&lServer &8&l| &7You cancelled your order." to {_player}
+            play sound "ENTITY_ITEM_BREAK" to player
